@@ -21,8 +21,6 @@ namespace LevelXEditor.Project.ActionTabs
             }
         }
 
-        public Visibility CloseButtonVisibility { get; set; } = Visibility.Visible;
-
         public ActionTabItem(UserControl userControl)
         {
             UserControl = userControl;

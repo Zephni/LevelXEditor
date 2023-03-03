@@ -64,7 +64,7 @@
                         <DataTemplate>
                             <StackPanel Name="stackPanel" Orientation="Horizontal" Height="18" Width="Auto" MouseDown="Tab_Clicked">
                                 <TextBlock Width="Auto" Text="{Binding Header}" Padding="2 0 14 0" Margin="0 1 0 0" />
-                                <Button Name="button_CloseTab" Visibility="{Binding CloseButtonVisibility}" Click="Button_CloseTab" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0 0 5 0" Margin="0 0 -4 0" Foreground="DarkRed" FontSize="10">X</Button>
+                                <Button Name="button_CloseTab" Click="Button_CloseTab" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0 0 5 0" Margin="0 0 -4 0" Foreground="DarkRed" FontSize="10">X</Button>
                             </StackPanel>
                         </DataTemplate>
                     </TabControl.ItemTemplate>

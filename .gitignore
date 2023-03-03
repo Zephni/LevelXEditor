@@ -1,2 +1,5 @@
 # Ignore .vs folder
 .vs
+
+# Ignore .vscode folder
+.vscode

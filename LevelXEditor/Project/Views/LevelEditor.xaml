@@ -1,12 +1,12 @@
 ﻿<UserControl x:Class="LevelXEditor.Project.Views.LevelEditor"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LevelXEditor.Project.Views"
-             mc:Ignorable="d"
-             Tag="New Level.lvl"
-             d:DesignHeight="450" d:DesignWidth="800">
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:LevelXEditor.Project.Views"
+            mc:Ignorable="d"
+            Tag="New Level.lvl"
+            d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ScrollViewer x:Name="levelScrollViewer" Background="{StaticResource Dark1}" CanContentScroll="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
             <Grid x:Name="levelCanvas" Width="10000" Height="10000">

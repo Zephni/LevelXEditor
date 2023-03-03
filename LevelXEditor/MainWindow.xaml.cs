@@ -23,25 +23,22 @@ namespace LevelXEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static MainWindow instance;
-        public ActionTabViewModal actionTabViewModel = new();
-        public TabControl tabControl { get { return actionTabs; } }
-        private List<Action<object, KeyEventArgs>> keyDownEvents = new();
+        public ActionTabViewModal actionTabsModel;
+        private static List<Action<object, KeyEventArgs>> keyDownEvents = new();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            instance = this;
-
             // Initiate SubRoutines
             SubRoutines.Initiate();
 
-            // Bind the xaml TabControl to view model tabs
-            actionTabs.ItemsSource = actionTabViewModel.Tabs;
+            // Create action tabs view model and bind to xaml
+            actionTabsModel = new(actionTabs);
+            actionTabs.ItemsSource = actionTabsModel.Tabs;
 
             // Populate the view model tabs
-            AddTab(new Dashboard());
+            actionTabsModel.AddTab(new Dashboard());
 
             // Preview key down event
             PreviewKeyDown += OnPreviewKeyDown;
@@ -52,61 +49,23 @@ namespace LevelXEditor
 
         public static void RegisterKeyDownEvent(Action<object, KeyEventArgs> keyDownEvent)
         {
-            instance.keyDownEvents.Add(keyDownEvent);
+            keyDownEvents.Add(keyDownEvent);
         }
 
         private void Button_CloseTab(object sender, RoutedEventArgs e)
         {
             // Find which index was clicked
-            int index = actionTabs.Items.IndexOf(((Button)sender).DataContext);
+            int index = actionTabsModel.tabControl.Items.IndexOf(((Button)sender).DataContext);
 
             // Close tab
-            CloseTab(index);
+            actionTabsModel.CloseTab(index);
 
             // Handled
-            e.Handled = true;
-        }
-
-        private void CloseTab(int index)
-        {
-            // If there is only 1 tab then bail
-            if (actionTabs.Items.Count <= 1)
+            if(e != null)
             {
-                return;
+                e.Handled = true;
             }
-
-            // Give focus
-            actionTabs.Focus();
-
-            // If we are closing the last tab, move to the previous tab
-            if (index == actionTabs.Items.Count - 1) actionTabs.SelectedIndex = index - 1;
-            
-            // If we are closing the first tab, move to the next tab
-            else if (index == 0) actionTabs.SelectedIndex = index + 1;
-            
-            // If we are closing a tab in the middle, move to the previous tab
-            else actionTabs.SelectedIndex = index - 1;
-
-            // Remove tab from view model
-            actionTabViewModel.Tabs.RemoveAt(index);
         }
-
-        private void AddTab(UserControl userControl, int? index = null)
-        {
-            // Create new tab
-            ActionTabItem actionTabItem = new(userControl);
-
-            // Add tab to view model
-            if (index == null) actionTabViewModel.Tabs.Add(actionTabItem);
-            else actionTabViewModel.Tabs.Insert((int)index, actionTabItem);
-
-            // Select tab
-            actionTabs.SelectedItem = actionTabItem;
-
-            // Hide close button
-            if (actionTabViewModel.Tabs.Count <= 1) actionTabItem.CloseButtonVisibility = Visibility.Hidden;
-        }
-
 
         private void Tab_Clicked(object sender, RoutedEventArgs e)
         {
@@ -116,7 +75,7 @@ namespace LevelXEditor
             // If middle click, close the tab
             if (e is MouseButtonEventArgs && ((MouseButtonEventArgs)e).ChangedButton == MouseButton.Middle)
             {
-                CloseTab(actionTabs.Items.IndexOf(tabObject));
+                actionTabsModel.CloseTab(actionTabsModel.tabControl.Items.IndexOf(tabObject));
             }
         }
 
@@ -127,8 +86,8 @@ namespace LevelXEditor
             // New
             if (menuItem.Name == "MenuItem_File_New")
             {
-                LevelEditor levelEditor = new(){ Tag = "New Level.lvl (" + actionTabViewModel.Tabs.Count + ")" };
-                AddTab(levelEditor);
+                LevelEditor levelEditor = new(){ Tag = "New Level.lvl (" + actionTabsModel.Tabs.Count + ")" };
+                actionTabsModel.AddTab(levelEditor);
 
                 // Once level editor is loaded and ready to scroll, scroll to center
                 SubRoutines.WaitUntil(() => levelEditor.levelScrollViewer != null && levelEditor.levelScrollViewer.IsLoaded, () => {
@@ -165,14 +124,11 @@ namespace LevelXEditor
             RegisterKeyDownEvent((object sender, KeyEventArgs e) => {
                 if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.W)
                 {
-                    // Get stack panel
-                    StackPanel stackPanel = actionTabs.GetItemContainer().GetContentPresenter().FindContentByName<StackPanel>("stackPanel");
-                    
-                    // Get Close Button
-                    Button closeButton = stackPanel.FindChildOfType<Button>((button) => button.Name == "button_CloseTab");
-                    
-                    // Call close button event
-                    Button_CloseTab(closeButton, e);
+                    // If a tab item exists, close it
+                    if(actionTabsModel.tabControl.Items.Count > 0)
+                    {
+                        actionTabsModel.CloseTab(actionTabsModel.tabControl.SelectedIndex);
+                    }
                 }
             });
         }
