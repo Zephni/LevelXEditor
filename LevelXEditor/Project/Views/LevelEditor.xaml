@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="LevelXEditor.Project.Views.LevelEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LevelXEditor.Project.Views"
+             mc:Ignorable="d"
+             Tag="New Level.lvl"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ScrollViewer x:Name="levelScrollViewer" Background="{StaticResource Dark1}" CanContentScroll="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <Grid x:Name="levelCanvas" Width="10000" Height="10000">
+                <Grid.LayoutTransform>
+                    <ScaleTransform x:Name="levelScaleTransform" ScaleX="1" ScaleY="1" />
+                </Grid.LayoutTransform>
+                <!-- Background Grid Pattern -->
+                <Grid.Background>
+                    <DrawingBrush TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute">
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="{StaticResource Dark2}" Thickness="1"/>
+                                    </GeometryDrawing.Pen>
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <LineGeometry StartPoint="0,0" EndPoint="0,10"/>
+                                            <LineGeometry StartPoint="0,0" EndPoint="10,0"/>
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Grid.Background>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

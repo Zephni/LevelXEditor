@@ -1,0 +1,32 @@
+﻿<Application x:Class="LevelXEditor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:LevelXEditor"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        
+        <!-- Default Styling -->
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10 5" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="10 5" />
+        </Style>
+
+        <Style TargetType="GridSplitter">
+            <!-- Apply dark stroke effect -->
+            <Setter Property="Background" Value="#FF333333" />
+        </Style>
+
+        <!-- Custom Colors -->
+        <SolidColorBrush x:Key="Shade1" Color="#EEEEEE" />
+        <SolidColorBrush x:Key="Shade2" Color="#E2E2E2" />
+        <SolidColorBrush x:Key="Shade3" Color="#CCCCFF" />
+
+        <SolidColorBrush x:Key="Dark1" Color="#232427" />
+        <SolidColorBrush x:Key="Dark2" Color="#30343A" />
+        <SolidColorBrush x:Key="Dark3" Color="#323E48" />
+
+    </Application.Resources>
+</Application>
