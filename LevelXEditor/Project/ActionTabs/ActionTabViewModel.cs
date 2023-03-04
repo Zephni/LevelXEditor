@@ -31,6 +31,17 @@ namespace LevelXEditor.Project.ActionTabs
             tabControl.ItemsSource = Tabs;
         }
 
+        public void UpdateTabHeaders()
+        {
+            foreach (ActionTabItem tab in Tabs) tab.SetHeaderFromUserControlTag();
+        }
+
+        public void PropertiesChanged()
+        {
+            NotifyPropertyChanged("Tabs");
+            foreach(ActionTabItem tab in Tabs) tab.PropertiesChanged();
+        }
+
         public void AddTab(UserControl userControl, int? index = null)
         {
             // Create new tab
@@ -62,6 +73,16 @@ namespace LevelXEditor.Project.ActionTabs
             SubRoutines.Wait(0.1f, () => {
                 Tabs.RemoveAt(index);
             });
+        }
+
+        public ActionTabItem? GetTabItem(UserControl userControl)
+        {
+            foreach (ActionTabItem tab in Tabs)
+            {
+                if (tab.UserControl == userControl) return tab;
+            }
+
+            return null;
         }
     }
 }

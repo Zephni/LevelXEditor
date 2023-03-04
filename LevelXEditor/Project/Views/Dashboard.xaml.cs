@@ -84,7 +84,7 @@ namespace LevelXEditor.Project.Views
 
     [ComVisible(true)]
     public class ScriptingObject {
-        public void MenuItem_File_Button(string name, string tag) {
+        public void MenuItem_File_Button(string name, string tag = "") {
             // We can use tag as a way to pass custom parameters to the MenuItem_File_Button method
             MainWindow.instance.MenuItem_File_Button(new MenuItem {Name = name, Tag = tag}, new RoutedEventArgs());
         }

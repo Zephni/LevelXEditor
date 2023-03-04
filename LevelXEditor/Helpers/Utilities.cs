@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace LevelXEditor
 {
@@ -38,6 +39,32 @@ namespace LevelXEditor
             }
 
             return null;
+        }
+
+        // Allow any number of parameters to drill down to a specific menu item by their names, eg "File", "Save":
+        // And then find the element like so, but dynamically using the parameters: (MenuItem)applicationMenu.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == "_File").First().Items.Cast<MenuItem>().Where(x => x.Header.ToString() == "_Save").First()
+        public static MenuItem GetApplicationMenuItem(params string[] names)
+        {
+            MenuItem menuItem = null;
+
+            // Get the application menu
+            Menu applicationMenu = (Menu)MainWindow.instance.ApplicationMenu;
+
+            for(int i = 0; i < names.Length; i++)
+            {
+                // If first iteration, get the menu item from the application menu
+                if(i == 0)
+                {
+                    menuItem = (MenuItem)applicationMenu.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[i]).First();
+                }
+                // Otherwise, get the menu item from the previous menu item
+                else
+                {
+                    menuItem = (MenuItem)menuItem.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[i]).First();
+                }
+            }
+
+            return menuItem;
         }
     }
 }

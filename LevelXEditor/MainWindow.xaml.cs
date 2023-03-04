@@ -25,6 +25,8 @@ namespace LevelXEditor
     {
         public static MainWindow instance;
         public ActionTabViewModal actionTabsModel;
+        public Menu ApplicationMenu => applicationMenu;
+        public LevelEditor? CurrentLevelEditor { get => (LevelEditor)((ActionTabItem)actionTabsModel.tabControl.SelectedItem).UserControl ?? null; }
         private static List<Action<object, KeyEventArgs>> keyDownEvents = new();
 
         public MainWindow()
@@ -51,6 +53,22 @@ namespace LevelXEditor
 
             // Register global key down events
             RegisterMainWindowKeyDownEvents();
+
+            // Handle file drops, and attempt to open file
+            PreviewDragOver += (sender, e) => e.Handled = true;
+            PreviewDrop += (sender, e) => {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    if (files.Length > 0)
+                    {
+                        foreach(string file in files)
+                        {
+                            MenuItem_File_Button(new MenuItem() { Name = "MenuItem_File_Open", Tag = file }, new RoutedEventArgs());
+                        }
+                    }
+                }
+            };
         }
 
         public static void RegisterKeyDownEvent(Action<object, KeyEventArgs> keyDownEvent)
@@ -85,6 +103,34 @@ namespace LevelXEditor
             }
         }
 
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // If there are no tabs, return
+            if (actionTabsModel.tabControl.Items.Count == 0)
+            {
+                return;
+            }
+
+            // Get the selected tab
+            ActionTabItem selectedTab = (ActionTabItem)actionTabsModel.tabControl.SelectedItem;
+
+            // If the selected tab is null, return
+            if (selectedTab == null)
+            {
+                return;
+            }
+
+            // If the selected tab is a level editor, enable / disable menu valid buttons
+            if (selectedTab.UserControl is LevelEditor levelEditor)
+            {
+                Utilities.GetApplicationMenuItem("_File", "_Save").IsEnabled = true;
+            }
+            else
+            {
+                Utilities.GetApplicationMenuItem("_File", "_Save").IsEnabled = false;
+            }
+        }
+
         public void MenuItem_File_Button(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
@@ -99,6 +145,50 @@ namespace LevelXEditor
                 SubRoutines.WaitUntil(() => levelEditor.levelScrollViewer != null && levelEditor.levelScrollViewer.IsLoaded, () => {
                     levelEditor.levelScrollViewer.ScrollToCenter();
                 });
+            }
+            // Open
+            else if(menuItem.Name == "MenuItem_File_Open")
+            {
+                // Create level editor
+                LevelEditor levelEditor = new();
+
+                // Check if menu item tag set
+                bool filePassed = menuItem.Tag != null && menuItem.Tag is string && (string)menuItem.Tag != "";
+
+                // Load level
+                bool success = levelEditor.LevelDataHandler.Load(filePassed ? (string)menuItem.Tag : null, levelEditor);
+
+                // Check valid
+                if(success == false)
+                {
+                    return;
+                }
+
+                // Add tab
+                actionTabsModel.AddTab(levelEditor);
+            }
+            // Save
+            else if(menuItem.Name == "MenuItem_File_Save")
+            {
+                // Check is enabled
+                if(Utilities.GetApplicationMenuItem("_File", "_Save").IsEnabled == false)
+                {
+                    MessageBox.Show("No level editor is open.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Get the correct LevelDataHandler object
+                ActionTabItem? actionTabItem = (ActionTabItem)actionTabsModel.tabControl.SelectedItem;
+                LevelEditor? levelEditor = (actionTabItem != null && actionTabItem.UserControl != null) ? (LevelEditor)actionTabItem.UserControl : null;
+
+                if(levelEditor != null)
+                {
+                    levelEditor.LevelDataHandler.Save();
+                }
+                else
+                {
+                    MessageBox.Show("No level editor is open.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             // Quit
             else if(menuItem.Name == "MenuItem_File_Quit")
@@ -123,6 +213,22 @@ namespace LevelXEditor
                 if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.N)
                 {
                     MenuItem_File_Button(MenuItem_File_New, new RoutedEventArgs());
+                }
+            });
+
+            // Save level
+            RegisterKeyDownEvent((object sender, KeyEventArgs e) => {
+                if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
+                {
+                    MenuItem_File_Button(MenuItem_File_Save, new RoutedEventArgs());
+                }
+            });
+
+            // Open level
+            RegisterKeyDownEvent((object sender, KeyEventArgs e) => {
+                if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.O)
+                {
+                    MenuItem_File_Button(MenuItem_File_Open, new RoutedEventArgs());
                 }
             });
 

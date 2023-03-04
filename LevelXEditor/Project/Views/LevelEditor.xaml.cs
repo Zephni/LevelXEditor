@@ -23,6 +23,7 @@ namespace LevelXEditor.Project.Views
     {
         private Point _lastMousePosition;
         private Point defaultScaleSize = new(1.75, 1.75);
+        public LevelDataHandler LevelDataHandler { get; set; } = new();
 
         public LevelEditor()
         {

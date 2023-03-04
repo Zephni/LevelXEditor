@@ -39,6 +39,12 @@ namespace LevelXEditor
             scrollViewer.ScrollToOffset(new Point(scrollViewer.ScrollableWidth / 2, scrollViewer.ScrollableHeight / 2));
         }
 
+        // ScrollViewer GetScrollOffset | Gets the current scroll offset
+        public static Point GetScrollOffset(this ScrollViewer scrollViewer)
+        {
+            return new Point(scrollViewer.HorizontalOffset, scrollViewer.VerticalOffset);
+        }
+
         // ContentPresenter FindContentByName | Finds content by name from this ContentPresenter's DataTemplate
         public static T FindContentByName<T>(this ContentPresenter contentPresenter, string name)
         {
