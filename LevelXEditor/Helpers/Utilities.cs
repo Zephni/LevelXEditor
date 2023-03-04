@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace LevelXEditor
 {
-    public class Utilities
+    public static class Utilities
     {
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {

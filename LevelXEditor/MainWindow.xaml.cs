@@ -23,6 +23,7 @@ namespace LevelXEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow instance;
         public ActionTabViewModal actionTabsModel;
         private static List<Action<object, KeyEventArgs>> keyDownEvents = new();
 
@@ -30,12 +31,17 @@ namespace LevelXEditor
         {
             InitializeComponent();
 
+            // Set instance
+            instance = this;
+
             // Initiate SubRoutines
             SubRoutines.Initiate();
 
+            // Set Icon
+            Icon = new BitmapImage(new Uri("./Resources/Icons/ApplicationIcon.png", UriKind.Relative));
+
             // Create action tabs view model and bind to xaml
             actionTabsModel = new(actionTabs);
-            actionTabs.ItemsSource = actionTabsModel.Tabs;
 
             // Populate the view model tabs
             actionTabsModel.AddTab(new Dashboard());
@@ -79,7 +85,7 @@ namespace LevelXEditor
             }
         }
 
-        private void MenuItem_File_Button(object sender, RoutedEventArgs e)
+        public void MenuItem_File_Button(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
 

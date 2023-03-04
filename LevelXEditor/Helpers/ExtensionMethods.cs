@@ -12,6 +12,13 @@ namespace LevelXEditor
 {
     public static class ExtensionMethods
     {
+        // T Modify | Modifies an object and returns it
+        public static T Modify<T>(this T obj, Action<T> modifier)
+        {
+            modifier(obj);
+            return obj;
+        }
+
         // ScaleTransform SetScale | Sets ScaleX and ScaleY by a Point
         public static void SetScale(this ScaleTransform scaleTransform, Point scale)
         {

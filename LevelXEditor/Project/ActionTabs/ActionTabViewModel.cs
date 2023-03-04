@@ -25,9 +25,10 @@ namespace LevelXEditor.Project.ActionTabs
         public ActionTabViewModal(TabControl _tabControl)
         {
             Tabs = new ObservableCollection<ActionTabItem>();
-            tabs = Tabs;
+            tabs = Tabs; // Fix for null reference exception
 
-            this.tabControl = _tabControl;
+            tabControl = _tabControl;
+            tabControl.ItemsSource = Tabs;
         }
 
         public void AddTab(UserControl userControl, int? index = null)

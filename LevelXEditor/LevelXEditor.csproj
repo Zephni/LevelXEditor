@@ -9,6 +9,12 @@
 
   <ItemGroup>
     <Folder Include="Project\ViewModels\" />
+
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Icons\" />
+    <Resource Include="Resources\Icons\ApplicationIcon.png" />
+    <Folder Include="Resources\HTML\" />
+    <Resource Include="Resources\HTML\Dashboard.html" />
   </ItemGroup>
 
 </Project>

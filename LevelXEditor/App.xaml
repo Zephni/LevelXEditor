@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:LevelXEditor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
+        <!--Images -->
+        <BitmapImage x:Key="ApplicationIcon" UriSource="Resources/Icons/ApplicationIcon.png" />
         
         <!-- Default Styling -->
         <Style TargetType="Button">

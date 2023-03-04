@@ -59,7 +59,7 @@
 
             <!-- Right Panel -->
             <Grid Grid.Column="2" Background="{StaticResource Shade2}" Margin="0">
-                <TabControl IsSynchronizedWithCurrentItem="True" x:Name="actionTabs" Background="White" AllowDrop="True">
+                <TabControl IsSynchronizedWithCurrentItem="True" x:Name="actionTabs" Background="{StaticResource Dark1}" AllowDrop="True">
                     <TabControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Name="stackPanel" Orientation="Horizontal" Height="18" Width="Auto" MouseDown="Tab_Clicked">
