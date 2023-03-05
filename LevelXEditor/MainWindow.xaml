@@ -17,11 +17,11 @@
 
         <Menu Grid.Row="0" x:Name="applicationMenu">
             <MenuItem Header="_File">
-                <MenuItem x:Name="MenuItem_File_New" Header="_New" Click="MenuItem_File_Button" />
-                <MenuItem x:Name="MenuItem_File_Open" Header="_Open" Click="MenuItem_File_Button" />
-                <MenuItem x:Name="MenuItem_File_Save" Header="_Save" Click="MenuItem_File_Button" />
+                <MenuItem Header="_New" Click="ApplicationMenuItem_Click" Tag="File_New" />
+                <MenuItem Header="_Open" Click="ApplicationMenuItem_Click" Tag="File_Open" />
+                <MenuItem Header="_Save" Click="ApplicationMenuItem_Click" Tag="File_Save" />
                 <Separator />
-                <MenuItem x:Name="MenuItem_File_Quit" Header="_Quit" Click="MenuItem_File_Button" />
+                <MenuItem Header="_Quit" Click="ApplicationMenuItem_Click" Tag="File_Quit" />
             </MenuItem>
         </Menu>
 

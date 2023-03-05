@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace LevelXEditor
 {
@@ -104,6 +105,25 @@ namespace LevelXEditor
         public static DependencyObject GetItemContainer(this Selector selector, int? index = null)
         {
             return selector.ItemContainerGenerator.ContainerFromIndex(index ?? selector.SelectedIndex);
+        }
+
+        // BitmapImage ToBase64String | Converts a BitmapImage to a Base64 string
+        public static string ToBase64String(this BitmapImage bitmapImage)
+        {
+            // Create a bitmap encoder
+            BitmapEncoder encoder = new PngBitmapEncoder();
+
+            // Add the bitmap frame to the encoder
+            encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+
+            // Create a memory stream
+            using System.IO.MemoryStream memoryStream = new();
+
+            // Encode the bitmap to the memory stream
+            encoder.Save(memoryStream);
+
+            // Return the base64 string
+            return Convert.ToBase64String(memoryStream.ToArray());
         }
     }
 }

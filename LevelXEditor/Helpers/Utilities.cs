@@ -45,23 +45,16 @@ namespace LevelXEditor
         // And then find the element like so, but dynamically using the parameters: (MenuItem)applicationMenu.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == "_File").First().Items.Cast<MenuItem>().Where(x => x.Header.ToString() == "_Save").First()
         public static MenuItem GetApplicationMenuItem(params string[] names)
         {
-            MenuItem menuItem = null;
-
             // Get the application menu
             Menu applicationMenu = (Menu)MainWindow.instance.ApplicationMenu;
 
-            for(int i = 0; i < names.Length; i++)
+            // Get the first menu item from the application menu
+            MenuItem menuItem = (MenuItem)applicationMenu.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[0]).First();
+
+            for(int i = 1; i < names.Length; i++)
             {
-                // If first iteration, get the menu item from the application menu
-                if(i == 0)
-                {
-                    menuItem = (MenuItem)applicationMenu.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[i]).First();
-                }
-                // Otherwise, get the menu item from the previous menu item
-                else
-                {
-                    menuItem = (MenuItem)menuItem.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[i]).First();
-                }
+                // If we are searching for a  sub item
+                menuItem = (MenuItem)menuItem.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[i]).First();
             }
 
             return menuItem;

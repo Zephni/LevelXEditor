@@ -28,8 +28,7 @@ namespace LevelXEditor.Project.Views
         {
             InitializeComponent();
 
-            StreamResourceInfo info = Application.GetResourceStream(new Uri("Resources/HTML/Dashboard.html", UriKind.Relative));
-            string html = new StreamReader(info.Stream).ReadToEnd();
+            string html = File.ReadAllText("Resources/HTML/Dashboard.html");
             webBrowser.ObjectForScripting = new ScriptingObject();
 
             // Search the html with regex to find "__RESOURCE/Any/Resource/Path.[png|jpg|gif]" where __RESOURCE is a special identifier
@@ -38,8 +37,7 @@ namespace LevelXEditor.Project.Views
             MatchCollection matches = regex.Matches(html);
             foreach (Match match in matches) {
                 string resourcePath = match.Value.Replace("__RESOURCE/", "");
-                StreamResourceInfo resourceInfo = Application.GetResourceStream(new Uri(resourcePath, UriKind.Relative));
-                string base64 = Convert.ToBase64String(new BinaryReader(resourceInfo.Stream).ReadBytes((int)resourceInfo.Stream.Length));
+                String base64 = new BitmapImage(new Uri(resourcePath, UriKind.Relative)).ToBase64String();
                 html = html.Replace(match.Value, "data:image/png;base64," + base64);
             }
 
@@ -58,20 +56,20 @@ namespace LevelXEditor.Project.Views
         {
             // For now create a dummy set of recent files
             List<string> recentFiles = new List<string>();
-            recentFiles.Add("C:\\Users\\Documents\\LevelX\\Level1.lvlx");
-            recentFiles.Add("C:\\Users\\Documents\\LevelX\\Level2.lvlx");
-            recentFiles.Add("C:\\Users\\Documents\\LevelX\\Level3.lvlx");
-            recentFiles.Add("C:\\Users\\Documents\\LevelX\\Level4.lvlx");
+            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
+            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
+            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
+            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
 
             // Create the html for the recent files
             string recentFilesHTML = "";
             foreach (string recentFile in recentFiles) {
-                // Using bootstrap 4
+                string file = recentFile.Replace(@"\", @"/");
                 recentFilesHTML += @"
                     <div class='d-block'>
-                        <a href='#' class='text-primary' onclick='window.external.MenuItem_File_Button('MenuItem_File_Open');'>
+                        <a href='#' title='"+file+@"' class='text-primary' onclick='window.external.MenuItem_File_Button(""File_Open"", """+file+@""");'>
                             <i class='bi bi-file-earmark-text text-primary'></i>
-                            " + recentFile + @"
+                            "+file+@"
                         </a>
                     </div>
                 ";
@@ -84,9 +82,9 @@ namespace LevelXEditor.Project.Views
 
     [ComVisible(true)]
     public class ScriptingObject {
-        public void MenuItem_File_Button(string name, string tag = "") {
-            // We can use tag as a way to pass custom parameters to the MenuItem_File_Button method
-            MainWindow.instance.MenuItem_File_Button(new MenuItem {Name = name, Tag = tag}, new RoutedEventArgs());
+        public void MenuItem_File_Button(string name, string parameter = "") {
+            // We can use tag as a way to pass custom parameters to the appropriate AppMenu method
+            MainWindow.instance.AppMenu.CallAssociatedMethod(new MenuItem { Tag = name, ToolTip = parameter }, new RoutedEventArgs());
         }
     }
 }

@@ -9,12 +9,12 @@
 
   <ItemGroup>
     <Folder Include="Project\ViewModels\" />
-
-    <Folder Include="Resources\" />
-    <Folder Include="Resources\Icons\" />
-    <Resource Include="Resources\Icons\ApplicationIcon.png" />
-    <Folder Include="Resources\HTML\" />
-    <Resource Include="Resources\HTML\Dashboard.html" />
+    <Content Include="Resources\Icons\ApplicationIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\HTML\Dashboard.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
