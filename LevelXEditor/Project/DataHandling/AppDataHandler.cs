@@ -9,9 +9,9 @@ namespace UserAppData
 {
     public class AppDataHandler
     {
-        // A property that holds an object of type SerializableData
-        private SerializableData data = new();
-        public SerializableData Data { get { LoadData(); return data; } }
+        // A property that holds an object of type SerializableAppData
+        private SerializableAppData data = new();
+        public SerializableAppData Data { get { LoadData(); return data; } }
 
         // A property that holds the application name
         public string AppName { get; set; }
@@ -26,7 +26,7 @@ namespace UserAppData
             AppName = Application.Current.MainWindow.GetType().Assembly.GetName().Name ?? "DefaultAppName";
         }
 
-        public void ModifyData(Action<SerializableData> serializableDataAction)
+        public void ModifyData(Action<SerializableAppData> serializableDataAction)
         {
             // Load the data
             LoadData();
@@ -119,10 +119,10 @@ namespace UserAppData
                     FileName
                 );
 
-                // If the file doesn't exist, just set the Data to a new SerializableData object
+                // If the file doesn't exist, just set the Data to a new SerializableAppData object
                 if (!File.Exists(filePath))
                 {
-                    data = new SerializableData();
+                    data = new SerializableAppData();
                     return true;
                 }
 
@@ -133,7 +133,7 @@ namespace UserAppData
                     string content = new StreamReader(stream).ReadToEnd();
 
                     // Get the json data
-                    data = SerializableData.Deserialize(content);
+                    data = SerializableAppData.DeserializeFrom(content);
                 }
 
                 // Return true if successful 

@@ -4,42 +4,24 @@ using System.Linq;
 using System.Xml.Serialization;
 
 [Serializable]
-public class SerializableData
+public class SerializableData<T>
 {
-    public string[] recentFiles { get; set; } = new string[0];
-
-    public void AddRecentFile(string path)
-    {        
-        // If the file is already in the list then remove it
-        if (recentFiles.Contains(path))
-        {
-            recentFiles = recentFiles.Where(x => x != path).ToArray();
-        }
-
-        // Prepend the file to the list
-        recentFiles = new string[] { path }.Concat(recentFiles).ToArray();
-
-        // If the list is longer than 10 then remove the last item/s
-        if (recentFiles.Length > 10)
-        {
-            recentFiles = recentFiles.Take(10).ToArray();
-        }
-    }
-
+    // Define a generic method for serialization
     public string Serialize()
     {
-        // Serialise the object to XML
-        var serializer = new XmlSerializer(typeof(SerializableData));
+        // Serialize the object to XML using XmlSerializer
+        var serializer = new XmlSerializer(typeof(T));
         using var stream = new StringWriter();
         serializer.Serialize(stream, this);
         return stream.ToString();
     }
 
-    public static SerializableData Deserialize(string str)
+    // Define a generic method for deserialization
+    public static T DeserializeFrom(string xml)
     {
-        // Deserialise the XML to an object
-        var serializer = new XmlSerializer(typeof(SerializableData));
-        using var stream = new StringReader(str);
-        return (SerializableData)serializer.Deserialize(stream);
+        // Deserialize the XML to an object using XmlSerializer
+        var serializer = new XmlSerializer(typeof(T));
+        using var stream = new StringReader(xml);
+        return (T)serializer.Deserialize(stream);
     }
 }
