@@ -78,6 +78,19 @@ namespace LevelXEditor.Project.Views
             // Inject the recent files html into the html
             return ReplaceHTML("<!-- __RECENT_FILES -->", recentFilesHTML, html);
         }
+
+        public static void Refresh()
+        {
+            if(MainWindow.instance.actionTabsModel.GetTabItem("Dashboard")?.UserControl == null)
+            {
+                return;
+            }
+
+            SubRoutines.Wait(0.1f, () => {
+                Dashboard? dashboard = (Dashboard?)MainWindow.instance.actionTabsModel.GetTabItem("Dashboard")?.UserControl;
+                dashboard?.RenderPage();
+            });
+        }
     }
 
     [ComVisible(true)]

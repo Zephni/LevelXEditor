@@ -19,7 +19,12 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New" Click="ApplicationMenuItem_Click" Tag="File_New" />
                 <MenuItem Header="_Open" Click="ApplicationMenuItem_Click" Tag="File_Open" />
+                <MenuItem Header="_Recent files">
+                    <!-- TODO: Add recent files here from AppDataHandler.Data.recentFiles -->
+                    <MenuItem Header="Clear recent files" Click="ApplicationMenuItem_Click" Tag="File_ClearRecentFiles" />
+                </MenuItem>
                 <MenuItem Header="_Save" Click="ApplicationMenuItem_Click" Tag="File_Save" />
+                <MenuItem Header="_Save as" Click="ApplicationMenuItem_Click" Tag="File_SaveAs" />
                 <Separator />
                 <MenuItem Header="_Quit" Click="ApplicationMenuItem_Click" Tag="File_Quit" />
             </MenuItem>

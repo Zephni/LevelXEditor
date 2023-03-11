@@ -39,7 +39,7 @@ namespace LevelXEditor
         }
 
         // File -> Open
-        public void File_Open(object parameter, RoutedEventArgs e = null){
+        public void File_Open(object parameter, RoutedEventArgs e){
             // Create level editor
             LevelEditor levelEditor = new();
 
@@ -58,10 +58,44 @@ namespace LevelXEditor
             MainWindow.instance.actionTabsModel.AddTab(levelEditor);
         }
 
+        // File -> Recent Files -> Clear Recent Files
+        public void File_ClearRecentFiles(object parameter, RoutedEventArgs e){
+            // Clear recent files
+            MainWindow.AppDataHandler.ModifyData(data => {
+                data.recentFiles = new string[0];
+            });
+
+            Dashboard.Refresh();
+        }
+
         // File -> Save
         public void File_Save(object parameter, RoutedEventArgs e){
             // Check is enabled
             if(Utilities.GetApplicationMenuItem("_File", "_Save").IsEnabled == false)
+            {
+                MessageBox.Show("No level editor is open.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Get the correct LevelDataHandler object
+            ActionTabItem? actionTabItem = (ActionTabItem)MainWindow.instance.actionTabsModel.tabControl.SelectedItem;
+            LevelEditor? levelEditor = (actionTabItem != null && actionTabItem.UserControl != null) ? (LevelEditor)actionTabItem.UserControl : null;
+
+            if(levelEditor != null)
+            {
+                string localFilePath = levelEditor.LevelDataHandler.levelData.editor_localFilePath;
+                levelEditor.LevelDataHandler.Save(localFilePath != "" ? localFilePath : null);
+            }
+            else
+            {
+                MessageBox.Show("No level editor is open.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // File -> Save As
+        public void File_SaveAs(object parameter, RoutedEventArgs e){
+            // Check is enabled
+            if(Utilities.GetApplicationMenuItem("_File", "_Save as").IsEnabled == false)
             {
                 MessageBox.Show("No level editor is open.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

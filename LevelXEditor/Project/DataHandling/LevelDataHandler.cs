@@ -41,10 +41,7 @@ namespace LevelXEditor
             });
 
             // Re-render the dashboard if open
-            SubRoutines.Wait(0.1f, () => {
-                Dashboard? dashboard = (Dashboard?)MainWindow.instance.actionTabsModel.GetTabItem("Dashboard")?.UserControl;
-                dashboard?.RenderPage();
-            });
+            Dashboard.Refresh();
         }
 
         public bool Load(string? path, LevelEditor levelEditor)
@@ -85,10 +82,7 @@ namespace LevelXEditor
                 });
                 
                 // Re-render the dashboard if open
-                SubRoutines.Wait(0.1f, () => {
-                    Dashboard? dashboard = (Dashboard?)MainWindow.instance.actionTabsModel.GetTabItem("Dashboard")?.UserControl;
-                    dashboard?.RenderPage();
-                });
+                Dashboard.Refresh();
             
                 return true;
             }
