@@ -23,6 +23,12 @@
                 <Separator />
                 <MenuItem Header="_Quit" Click="ApplicationMenuItem_Click" Tag="File_Quit" />
             </MenuItem>
+            <MenuItem Header="_Edit">
+            </MenuItem>
+            <MenuItem Header="_Go">
+                <MenuItem Header="-> Dashboard" Click="ApplicationMenuItem_Click" Tag="Go_Dashboard" />
+                <MenuItem Header="-> Local AppData Directory" Click="ApplicationMenuItem_Click" Tag="Go_AppData" />
+            </MenuItem>
         </Menu>
 
         <Grid Grid.Row="1">

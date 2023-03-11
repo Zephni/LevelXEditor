@@ -85,5 +85,30 @@ namespace LevelXEditor
         public void File_Quit(object parameter, RoutedEventArgs e){
             Application.Current.Shutdown();
         }
+    
+        // Go -> Dashboard
+        public void Go_Dashboard(object parameter, RoutedEventArgs e){
+            // Check if dashboard is already open
+            if(MainWindow.instance.actionTabsModel.IsTabOpen("Dashboard"))
+            {
+                // Switch to dashboard
+                MainWindow.instance.actionTabsModel.SwitchToTab("Dashboard");
+                return;
+            }
+            else
+            {
+                // Add tab
+                MainWindow.instance.actionTabsModel.AddTab(new Dashboard());
+            }
+        }
+    
+        // Go -> Local AppData Directory
+        public void Go_AppData(object parameter, RoutedEventArgs e){
+            // AppData path
+            string appDataPath = MainWindow.AppDataHandler.GetDirectoryPath();
+
+            // Open AppData directory in windows explorer
+            System.Diagnostics.Process.Start("explorer.exe", appDataPath);
+        }
     }
 }

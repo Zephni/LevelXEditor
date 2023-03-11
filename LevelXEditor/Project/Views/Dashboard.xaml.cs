@@ -27,7 +27,11 @@ namespace LevelXEditor.Project.Views
         public Dashboard()
         {
             InitializeComponent();
+            RenderPage();
+        }
 
+        public void RenderPage()
+        {
             string html = File.ReadAllText("Resources/HTML/Dashboard.html");
             webBrowser.ObjectForScripting = new ScriptingObject();
 
@@ -41,10 +45,10 @@ namespace LevelXEditor.Project.Views
                 html = html.Replace(match.Value, "data:image/png;base64," + base64);
             }
 
-            // Inject the recent files into the html
+            // Inject the recent files into the html and navigate to html string
             html = InjectRecentFiles(html);
-
             webBrowser.NavigateToString(html);
+            
         }
 
         private string ReplaceHTML(string replace, string with, string html)
@@ -54,22 +58,18 @@ namespace LevelXEditor.Project.Views
 
         private string InjectRecentFiles(string html)
         {
-            // For now create a dummy set of recent files
-            List<string> recentFiles = new List<string>();
-            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
-            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
-            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
-            recentFiles.Add("C:\\Users\\zephn\\Desktop\\tester.lvlx");
-
             // Create the html for the recent files
             string recentFilesHTML = "";
-            foreach (string recentFile in recentFiles) {
-                string file = recentFile.Replace(@"\", @"/");
+
+            foreach (string recentFile in MainWindow.AppDataHandler.Data.recentFiles) {
+                string escapedfile = recentFile.Replace(@"\", @"\\");
+                escapedfile = escapedfile.Replace(@"\\\", @"\\");
+                
                 recentFilesHTML += @"
                     <div class='d-block'>
-                        <a href='#' title='"+file+@"' class='text-primary' onclick='window.external.MenuItem_File_Button(""File_Open"", """+file+@""");'>
+                        <a href='#' title='" + escapedfile + @"' class='text-primary' onclick='window.external.MenuItem_File_Button(""File_Open"", """ + escapedfile + @""");'>
                             <i class='bi bi-file-earmark-text text-primary'></i>
-                            "+file+@"
+                            " + recentFile + @"
                         </a>
                     </div>
                 ";

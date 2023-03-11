@@ -27,9 +27,10 @@ namespace LevelXEditor
         public ActionTabViewModal actionTabsModel;
         public Menu ApplicationMenu => applicationMenu;
         public ApplicationMenuHandler AppMenu = new();
-        public LevelEditor? CurrentLevelEditor { get => (LevelEditor)((ActionTabItem)actionTabsModel.tabControl.SelectedItem).UserControl ?? null; }
-        private static List<Action<object, KeyEventArgs>> keyDownEvents = new();
+        public LevelEditor? CurrentLevelEditor { get => (LevelEditor?)((ActionTabItem?)actionTabsModel.tabControl.SelectedItem)?.UserControl; }
+        public static UserAppData.AppDataHandler AppDataHandler { get; } = new();
 
+        private static List<Action<object, KeyEventArgs>> keyDownEvents = new();
         public MainWindow()
         {
             InitializeComponent();

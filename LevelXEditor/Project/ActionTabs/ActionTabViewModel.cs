@@ -84,5 +84,28 @@ namespace LevelXEditor.Project.ActionTabs
 
             return null;
         }
+
+        public ActionTabItem? GetTabItem(string userControlClassName)
+        {
+            foreach (ActionTabItem tab in Tabs)
+            {
+                // Get the class name from the tab's UserControl
+                string className = tab.UserControl?.GetType().Name ?? "";
+                if (className == userControlClassName) return tab;
+            }
+
+            return null;
+        }
+
+        public bool IsTabOpen(string userControlClassName)
+        {
+            return GetTabItem(userControlClassName) != null;
+        }
+
+        public void SwitchToTab(string userControlClassName)
+        {
+            ActionTabItem? tab = GetTabItem(userControlClassName);
+            if (tab != null) tabControl.SelectedItem = tab;
+        }
     }
 }

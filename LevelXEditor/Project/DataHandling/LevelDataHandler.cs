@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Linq;
 using Microsoft.Win32;
 using LevelXEditor.Project.Views;
+using System.Windows;
 
 namespace LevelXEditor
 {
@@ -33,6 +34,17 @@ namespace LevelXEditor
 
             // Write JSON to file
             System.IO.File.WriteAllText(path, json);
+
+            // Update recent files
+            MainWindow.AppDataHandler.ModifyData(data => {
+                data.AddRecentFile(path);
+            });
+
+            // Re-render the dashboard if open
+            SubRoutines.Wait(0.1f, () => {
+                Dashboard? dashboard = (Dashboard?)MainWindow.instance.actionTabsModel.GetTabItem("Dashboard")?.UserControl;
+                dashboard?.RenderPage();
+            });
         }
 
         public bool Load(string? path, LevelEditor levelEditor)
@@ -44,13 +56,19 @@ namespace LevelXEditor
             }
 
             // If path is still null then return
-            if (path == null)
-            {
+            if (path == null) return false;
+
+            // If the file doesn't exist then show message return
+            if (!System.IO.File.Exists(path)) {
+                MessageBox.Show("The file does not exist: "+path, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
-            // Read JSON from file
+            // Read XML from file
             string json = System.IO.File.ReadAllText(path);
+
+            // If JSON is empty then message and return
+            if (json == null || json == "") return false;
 
             // Convert JSON back to LevelData object
             var _levelData = JsonSerializer.Deserialize<LevelData>(json);
@@ -60,6 +78,18 @@ namespace LevelXEditor
             {
                 levelData = _levelData;
                 levelData.OnLoad(path, levelEditor);
+
+                // Update recent files
+                MainWindow.AppDataHandler.ModifyData(data => {
+                    data.AddRecentFile(path);
+                });
+                
+                // Re-render the dashboard if open
+                SubRoutines.Wait(0.1f, () => {
+                    Dashboard? dashboard = (Dashboard?)MainWindow.instance.actionTabsModel.GetTabItem("Dashboard")?.UserControl;
+                    dashboard?.RenderPage();
+                });
+            
                 return true;
             }
             else
