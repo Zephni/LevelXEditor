@@ -29,19 +29,20 @@ namespace LevelXEditor
             // Update file path
             levelData.OnSave(path);
 
-            // Convert data dictionary to JSON
-            string json = JsonSerializer.Serialize(levelData);
+            // Convert data dictionary to XML
+            string xml = levelData.Serialize();
 
-            // Write JSON to file
-            System.IO.File.WriteAllText(path, json);
+            // Write XML to file
+            System.IO.File.WriteAllText(path, xml);
 
             // Update recent files
             MainWindow.AppDataHandler.ModifyData(data => {
                 data.AddRecentFile(path);
             });
 
-            // Re-render the dashboard if open
+            // Refresh any nessesary UI elements
             Dashboard.Refresh();
+            MainWindow.instance.RefreshUI();
         }
 
         public bool Load(string? path, LevelEditor levelEditor)
@@ -62,17 +63,17 @@ namespace LevelXEditor
             }
 
             // Read XML from file
-            string json = System.IO.File.ReadAllText(path);
+            string xml = System.IO.File.ReadAllText(path);
 
             // If JSON is empty then message and return
-            if (json == null || json == "") return false;
+            if (xml == null || xml == "") return false;
 
-            // Convert JSON back to LevelData object
-            var _levelData = JsonSerializer.Deserialize<LevelData>(json);
-
-            // If the deserialization was successful then update the levelData object
-            if (_levelData != null)
+            try
             {
+                // Convert JSON back to LevelData object
+                var _levelData = LevelData.DeserializeFrom(xml);
+
+                // Update the levelData object
                 levelData = _levelData;
                 levelData.OnLoad(path, levelEditor);
 
@@ -81,13 +82,15 @@ namespace LevelXEditor
                     data.AddRecentFile(path);
                 });
                 
-                // Re-render the dashboard if open
+                // Refresh any nessesary UI elements
                 Dashboard.Refresh();
+                MainWindow.instance.RefreshUI();
             
                 return true;
             }
-            else
+            catch(Exception e)
             {
+                MessageBox.Show("Failed to load level: "+e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
         }

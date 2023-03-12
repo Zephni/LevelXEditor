@@ -49,12 +49,17 @@ namespace LevelXEditor
             Menu applicationMenu = (Menu)MainWindow.instance.ApplicationMenu;
 
             // Get the first menu item from the application menu
-            MenuItem menuItem = (MenuItem)applicationMenu.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[0]).First();
+            MenuItem menuItem = (MenuItem)applicationMenu.Items.Cast<MenuItem>().Where(x => x.Tag.ToString() == names[0]).First();
 
             for(int i = 1; i < names.Length; i++)
             {
-                // If we are searching for a  sub item
-                menuItem = (MenuItem)menuItem.Items.Cast<MenuItem>().Where(x => x.Header.ToString() == names[i]).First();
+                // Quick debug test
+                // MessageBox.Show(menuItem.Tag + ": " + menuItem.MenuItemsAsList().Count().ToString());
+
+                // If we are searching for a sub item, get the sub item
+                var items = menuItem.Items.OfType<MenuItem>().Where(x => x.Tag.ToString() == names[i]);
+                if(items.Count() == 0) continue;
+                menuItem = items.First();
             }
 
             return menuItem;

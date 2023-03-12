@@ -113,23 +113,32 @@ namespace LevelXEditor
                 return;
             }
 
+            RefreshUI();
+        }
+
+        public void RefreshUI()
+        {
             // Get the selected tab
             ActionTabItem selectedTab = (ActionTabItem)actionTabsModel.tabControl.SelectedItem;
 
-            // If the selected tab is null, return
-            if (selectedTab == null)
-            {
-                return;
+            // If the selected tab is a level editor, enable / disable menu valid buttons
+            if (selectedTab != null) {
+                Utilities.GetApplicationMenuItem("File", "File_Save").IsEnabled = (selectedTab.UserControl is LevelEditor levelEditor);
             }
 
-            // If the selected tab is a level editor, enable / disable menu valid buttons
-            if (selectedTab.UserControl is LevelEditor levelEditor)
-            {
-                Utilities.GetApplicationMenuItem("_File", "_Save").IsEnabled = true;
+            // Recent files in application menu
+            string[] recentFiles = AppDataHandler.Data.recentFiles;
+            foreach (MenuItem menuItem in Utilities.GetApplicationMenuItem("File", "File_RecentFiles").Items) {
+                if((string)menuItem.Tag != "File_RecentFiles_Clear") menuItem.Visibility = Visibility.Collapsed;
+                else menuItem.IsEnabled = recentFiles.Length > 0;
             }
-            else
+            for(int i = 0; i < recentFiles.Length; i++)
             {
-                Utilities.GetApplicationMenuItem("_File", "_Save").IsEnabled = false;
+                if (recentFiles[i] == null) continue;
+                MenuItem menuItem = (MenuItem)Utilities.GetApplicationMenuItem("File", "File_RecentFiles").Items[i];
+                menuItem.Visibility = Visibility.Visible;
+                menuItem.Header = recentFiles[i];
+                menuItem.ToolTip = recentFiles[i];
             }
         }
 

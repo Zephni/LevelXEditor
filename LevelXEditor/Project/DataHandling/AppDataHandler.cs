@@ -17,7 +17,7 @@ namespace UserAppData
         public string AppName { get; set; }
 
         // A property that holds the file name
-        public string FileName { get; set; } = "Data.xml";
+        public string FileName { get; set; } = "LevelXEditorData.xml";
 
         // A constructor that sets AppName automatically based on the namespace
         public AppDataHandler()
@@ -113,11 +113,7 @@ namespace UserAppData
             try
             {
                 // Get the file path for UserAppData in Local folder
-                string filePath = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    AppName,
-                    FileName
-                );
+                string filePath = GetFullFilePath();
 
                 // If the file doesn't exist, just set the Data to a new SerializableAppData object
                 if (!File.Exists(filePath))

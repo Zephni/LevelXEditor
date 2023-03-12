@@ -16,23 +16,32 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" x:Name="applicationMenu">
-            <MenuItem Header="_File">
+            <MenuItem Header="_File" Tag="File">
                 <MenuItem Header="_New" Click="ApplicationMenuItem_Click" Tag="File_New" />
                 <MenuItem Header="_Open" Click="ApplicationMenuItem_Click" Tag="File_Open" />
-                <MenuItem Header="_Recent files">
-                    <!-- TODO: Add recent files here from AppDataHandler.Data.recentFiles -->
-                    <MenuItem Header="Clear recent files" Click="ApplicationMenuItem_Click" Tag="File_ClearRecentFiles" />
+                <MenuItem Header="_Recent files" Tag="File_RecentFiles">
+                    <MenuItem Header="Item 1" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
+                    <MenuItem Header="Item 2" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
+                    <MenuItem Header="Item 3" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
+                    <MenuItem Header="Item 4" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
+                    <MenuItem Header="Item 5" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
+                    <MenuItem Header="Clear recent files" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Clear" />
                 </MenuItem>
                 <MenuItem Header="_Save" Click="ApplicationMenuItem_Click" Tag="File_Save" />
                 <MenuItem Header="_Save as" Click="ApplicationMenuItem_Click" Tag="File_SaveAs" />
                 <Separator />
                 <MenuItem Header="_Quit" Click="ApplicationMenuItem_Click" Tag="File_Quit" />
             </MenuItem>
-            <MenuItem Header="_Edit">
+            <MenuItem Header="_Edit" Tag="Edit">
             </MenuItem>
-            <MenuItem Header="_Go">
+            <MenuItem Header="_Go" Tag="Go">
                 <MenuItem Header="-> Dashboard" Click="ApplicationMenuItem_Click" Tag="Go_Dashboard" />
-                <MenuItem Header="-> Local AppData Directory" Click="ApplicationMenuItem_Click" Tag="Go_AppData" />
+                <Separator />
+                <MenuItem Header="-> Level XML" Click="ApplicationMenuItem_Click" Tag="Go_LevelFile" />
+                <MenuItem Header="-> Level Directory" Click="ApplicationMenuItem_Click" Tag="Go_LevelDirectory" />
+                <Separator />
+                <MenuItem Header="-> Local Settings XML" Click="ApplicationMenuItem_Click" Tag="Go_AppDataFile" />
+                <MenuItem Header="-> Local Settings Directory" Click="ApplicationMenuItem_Click" Tag="Go_AppData" />
             </MenuItem>
         </Menu>
 

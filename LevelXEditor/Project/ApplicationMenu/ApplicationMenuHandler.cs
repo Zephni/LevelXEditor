@@ -58,14 +58,25 @@ namespace LevelXEditor
             MainWindow.instance.actionTabsModel.AddTab(levelEditor);
         }
 
+        // File -> Recent Files -> File
+        public void File_RecentFiles_Open(object parameter, RoutedEventArgs e){
+            // Get the file path
+            string filePath = (string)parameter;
+
+            // Open the file
+            File_Open(filePath, e);
+        }
+
         // File -> Recent Files -> Clear Recent Files
-        public void File_ClearRecentFiles(object parameter, RoutedEventArgs e){
+        public void File_RecentFiles_Clear(object parameter, RoutedEventArgs e){
             // Clear recent files
             MainWindow.AppDataHandler.ModifyData(data => {
                 data.recentFiles = new string[0];
             });
 
+            // Refresh
             Dashboard.Refresh();
+            MainWindow.instance.RefreshUI();
         }
 
         // File -> Save
@@ -136,6 +147,48 @@ namespace LevelXEditor
             }
         }
     
+        // Go -> Level File
+        public void Go_LevelFile(object parameter, RoutedEventArgs e){
+            // If level editor isn't open then return flase
+            ActionTabItem selectedTab = (ActionTabItem)MainWindow.instance.actionTabsModel.tabControl.SelectedItem;
+            if(selectedTab.UserControl == null || selectedTab.UserControl.GetType() != typeof(LevelEditor)) {
+                return;
+            }
+
+            // Get level editor and level file path
+            LevelEditor levelEditor = (LevelEditor)selectedTab.UserControl;
+            string levelFilePath = levelEditor.LevelDataHandler.levelData.editor_localFilePath;
+
+            // Open AppData directory in windows explorer
+            System.Diagnostics.Process.Start("notepad.exe", levelFilePath);
+        }
+
+        // Go -> Level Directory
+        public void Go_LevelDirectory(object parameter, RoutedEventArgs e){
+            // If level editor isn't open then return flase
+            ActionTabItem selectedTab = (ActionTabItem)MainWindow.instance.actionTabsModel.tabControl.SelectedItem;
+            if(selectedTab.UserControl == null || selectedTab.UserControl.GetType() != typeof(LevelEditor)) {
+                return;
+            }
+
+            // Get level editor and level file path
+            LevelEditor levelEditor = (LevelEditor)selectedTab.UserControl;
+            string levelFilePath = levelEditor.LevelDataHandler.levelData.editor_localFilePath;
+            string directoryPath = levelFilePath.Substring(0, levelFilePath.LastIndexOf("\\"));
+
+            // Open AppData directory in windows explorer
+            System.Diagnostics.Process.Start("explorer.exe", directoryPath);
+        }
+
+        // Go -> Local AppData Settings File
+        public void Go_AppDataFile(object parameter, RoutedEventArgs e){
+            // AppData path
+            string appDataPath = MainWindow.AppDataHandler.GetFullFilePath();
+
+            // Open AppData directory in windows explorer
+            System.Diagnostics.Process.Start("notepad.exe", appDataPath);
+        }
+
         // Go -> Local AppData Directory
         public void Go_AppData(object parameter, RoutedEventArgs e){
             // AppData path

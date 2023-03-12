@@ -5,7 +5,7 @@ using LevelXEditor.Project.Views;
 
 namespace LevelXEditor
 {
-    public class LevelData
+    public class LevelData : SerializableData<LevelData>
     {
         // You can use [JsonInclude] or [JsonIgnore] to include or exclude a property from serialization
         // Also use [JsonPropertyName("someName")] to change the name of the property in the JSON file
