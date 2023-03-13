@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Win32;
 using LevelXEditor.Project.Views;
 using System.Windows;
+using LevelXEditor.Project.ActionTabs;
 
 namespace LevelXEditor
 {
@@ -72,6 +73,14 @@ namespace LevelXEditor
             {
                 // Convert JSON back to LevelData object
                 var _levelData = LevelData.DeserializeFrom(xml);
+
+                // If there is any level open with the same local file path then show message and return
+                ActionTabItem? levelTabThatMayExist = MainWindow.instance.actionTabsModel.GetTabWhere(tab => tab.UserControl is LevelEditor levelEditor && levelEditor.LevelDataHandler.levelData.editor_localFilePath == _levelData.editor_localFilePath);
+                if (levelTabThatMayExist != null) {
+                    MessageBox.Show("Level file is already open: "+path, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MainWindow.instance.actionTabsModel.SwitchToTab(levelTabThatMayExist);
+                    return false;
+                }
 
                 // Update the levelData object
                 levelData = _levelData;

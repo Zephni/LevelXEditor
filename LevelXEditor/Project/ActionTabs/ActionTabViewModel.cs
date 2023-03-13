@@ -97,14 +97,46 @@ namespace LevelXEditor.Project.ActionTabs
             return null;
         }
 
+        public ActionTabItem GetTabWhere(Func<ActionTabItem, bool> predicate)
+        {
+            foreach (ActionTabItem tab in Tabs)
+            {
+                if (predicate(tab)) return tab;
+            }
+
+            return null;
+        }
+
+        public List<ActionTabItem> GetTabsWhere(Func<ActionTabItem, bool> predicate)
+        {
+            List<ActionTabItem> tabs = new();
+            foreach (ActionTabItem tab in Tabs)
+            {
+                if (predicate(tab)) tabs.Add(tab);
+            }
+
+            return tabs;
+        }
+
         public bool IsTabOpen(string userControlClassName)
         {
             return GetTabItem(userControlClassName) != null;
         }
 
+        public void SwitchToTab(ActionTabItem actionTabItem)
+        {
+            tabControl.SelectedItem = actionTabItem;
+        }
+
         public void SwitchToTab(string userControlClassName)
         {
             ActionTabItem? tab = GetTabItem(userControlClassName);
+            if (tab != null) tabControl.SelectedItem = tab;
+        }
+
+        public void SwitchToTabWhere(Func<ActionTabItem, bool> predicate)
+        {
+            ActionTabItem? tab = GetTabWhere(predicate);
             if (tab != null) tabControl.SelectedItem = tab;
         }
     }
