@@ -6,10 +6,15 @@
         xmlns:local="clr-namespace:LevelXEditor"
         xmlns:views="clr-namespace:LevelXEditor.Project.Views"
         xmlns:statusBar="clr-namespace:LevelXEditor.Project.StatusBar"
+        xmlns:recentFiles="clr-namespace:LevelXEditor.Project.RecentFiles"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <!-- Status bar-->
         <statusBar:StatusBarViewModal x:Key="statusBarViewModel"/>
+        
+        <!-- Recent Files-->
+        <recentFiles:RecentFilesViewModel x:Key="recentFilesViewModel"/>
     </Window.Resources>
     <Grid Background="SlateGray">
         <!-- Row Definitions -->
@@ -23,13 +28,23 @@
             <MenuItem Header="_File" Tag="File">
                 <MenuItem Header="_New" Click="ApplicationMenuItem_Click" Tag="File_New" />
                 <MenuItem Header="_Open" Click="ApplicationMenuItem_Click" Tag="File_Open" />
-                <MenuItem Header="_Recent files" Tag="File_RecentFiles">
-                    <MenuItem Header="Item 1" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
-                    <MenuItem Header="Item 2" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
-                    <MenuItem Header="Item 3" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
-                    <MenuItem Header="Item 4" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
-                    <MenuItem Header="Item 5" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Open" />
-                    <MenuItem Header="Clear recent files" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Clear" />
+                <MenuItem Header="_Recent files" Tag="File_RecentFiles" DataContext="{Binding recentFilesViewModel}">
+                    <MenuItem.ItemsSource>
+                        <CompositeCollection>
+                            <CollectionContainer Collection="{Binding Source={StaticResource recentFilesViewModel}, Path=RecentFiles}"/>
+                            <Separator/>
+                            <MenuItem Header="Clear recent files" Click="ApplicationMenuItem_Click" Tag="File_RecentFiles_Clear" />
+                        </CompositeCollection>
+                    </MenuItem.ItemsSource>
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <EventSetter Event="Click" Handler="ApplicationMenuItem_Click"/>
+                            <Setter Property="Header" Value="{Binding FilePath}"/>
+                            <Setter Property="Tag" Value="File_RecentFiles_Open"/>
+                            <Setter Property="ToolTip" Value="{Binding FilePath}"/>
+                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
                 </MenuItem>
                 <MenuItem Header="_Save" Click="ApplicationMenuItem_Click" Tag="File_Save" />
                 <MenuItem Header="_Save as" Click="ApplicationMenuItem_Click" Tag="File_SaveAs" />

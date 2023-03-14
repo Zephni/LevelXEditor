@@ -8,6 +8,8 @@ public class SerializableAppData : SerializableData<SerializableAppData>
 {
     public string[] recentFiles { get; set; } = new string[0];
 
+    public string? lastUsedDirectory { get; set; } = null;
+
     public void AddRecentFile(string path)
     {        
         // If the file is already in the list then remove it

@@ -75,14 +75,13 @@ namespace LevelXEditor
             });
 
             // Refresh
-            Dashboard.Refresh();
             MainWindow.instance.RefreshUI();
         }
 
         // File -> Save
         public void File_Save(object parameter, RoutedEventArgs e){
             // Check is enabled
-            if(Utilities.GetApplicationMenuItem("_File", "_Save").IsEnabled == false)
+            if(Utilities.GetApplicationMenuItem("File", "File_Save").IsEnabled == false)
             {
                 MessageBox.Show("No level editor is open.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -106,7 +105,7 @@ namespace LevelXEditor
         // File -> Save As
         public void File_SaveAs(object parameter, RoutedEventArgs e){
             // Check is enabled
-            if(Utilities.GetApplicationMenuItem("_File", "_Save as").IsEnabled == false)
+            if(Utilities.GetApplicationMenuItem("File", "File_SaveAs").IsEnabled == false)
             {
                 MessageBox.Show("No level editor is open.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

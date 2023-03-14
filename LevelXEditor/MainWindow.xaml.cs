@@ -129,20 +129,11 @@ namespace LevelXEditor
                 Utilities.GetApplicationMenuItem("Go", "Go_LevelDirectory").IsEnabled = isLevelEditorTab;
             }
 
-            // Recent files in application menu
-            string[] recentFiles = AppDataHandler.Data.recentFiles;
-            foreach (MenuItem menuItem in Utilities.GetApplicationMenuItem("File", "File_RecentFiles").Items) {
-                if((string)menuItem.Tag != "File_RecentFiles_Clear") menuItem.Visibility = Visibility.Collapsed;
-                else menuItem.IsEnabled = recentFiles.Length > 0;
-            }
-            for(int i = 0; i < recentFiles.Length; i++)
-            {
-                if (recentFiles[i] == null) continue;
-                MenuItem menuItem = (MenuItem)Utilities.GetApplicationMenuItem("File", "File_RecentFiles").Items[i];
-                menuItem.Visibility = Visibility.Visible;
-                menuItem.Header = recentFiles[i];
-                menuItem.ToolTip = recentFiles[i];
-            }
+            // Refresh recent files
+            Project.RecentFiles.RecentFilesViewModel.instance.Refresh();
+
+            // Refresh the dashboard
+            Dashboard.Refresh();
         }
 
         public void ApplicationMenuItem_Click(object sender, RoutedEventArgs e)

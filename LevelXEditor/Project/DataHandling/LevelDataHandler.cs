@@ -42,7 +42,6 @@ namespace LevelXEditor
             });
 
             // Refresh any nessesary UI elements
-            Dashboard.Refresh();
             MainWindow.instance.RefreshUI();
         }
 
@@ -92,7 +91,6 @@ namespace LevelXEditor
                 });
                 
                 // Refresh any nessesary UI elements
-                Dashboard.Refresh();
                 MainWindow.instance.RefreshUI();
             
                 return true;
@@ -111,13 +109,17 @@ namespace LevelXEditor
 
             // Set some properties for the dialog
             saveFileDialog.Filter = "LVLX files (*.lvlx)|*.lvlx|All files (*.*)|*.*";
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             // Show the dialog and get the result
             bool? result = saveFileDialog.ShowDialog();
 
             // If the user clicked OK, save the file, otherwise return null
-            return (result == true) ? saveFileDialog.FileName : null;
+            if(result == true) {
+                MainWindow.AppDataHandler.ModifyData(data => data.lastUsedDirectory = saveFileDialog.FileName);
+                return saveFileDialog.FileName;
+            } else {
+                return null;
+            }
         }
 
         public string? OpenLoadDialog()
@@ -127,13 +129,17 @@ namespace LevelXEditor
 
             // Set some properties for the dialog
             openFileDialog.Filter = "LVLX files (*.lvlx)|*.lvlx|All files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             // Show the dialog and get the result
             bool? result = openFileDialog.ShowDialog();
 
             // If the user clicked OK, save the file, otherwise return null
-            return (result == true) ? openFileDialog.FileName : null;
+            if(result == true) {
+                MainWindow.AppDataHandler.ModifyData(data => data.lastUsedDirectory = openFileDialog.FileName);
+                return openFileDialog.FileName;
+            } else {
+                return null;
+            }
         }
     }
 }
