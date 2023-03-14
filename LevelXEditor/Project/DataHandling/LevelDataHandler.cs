@@ -74,9 +74,9 @@ namespace LevelXEditor
                 var _levelData = LevelData.DeserializeFrom(xml);
 
                 // If there is any level open with the same local file path then show message and return
-                ActionTabItem? levelTabThatMayExist = MainWindow.instance.actionTabsModel.GetTabWhere(tab => tab.UserControl is LevelEditor levelEditor && levelEditor.LevelDataHandler.levelData.editor_localFilePath == _levelData.editor_localFilePath);
+                ActionTabItem? levelTabThatMayExist = MainWindow.instance.actionTabsModel.GetTabWhere(tab => tab.UserControl is LevelEditor levelEditor && levelEditor.LevelDataHandler.levelData.editor_localFilePath == path);
                 if (levelTabThatMayExist != null) {
-                    MessageBox.Show("Level file is already open: "+path, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("This level file is already open, switching to tab for:\n"+path, "Level Already Open", MessageBoxButton.OK, MessageBoxImage.Information);
                     MainWindow.instance.actionTabsModel.SwitchToTab(levelTabThatMayExist);
                     return false;
                 }
