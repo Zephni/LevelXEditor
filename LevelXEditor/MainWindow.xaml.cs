@@ -123,7 +123,10 @@ namespace LevelXEditor
 
             // If the selected tab is a level editor, enable / disable menu valid buttons
             if (selectedTab != null) {
-                Utilities.GetApplicationMenuItem("File", "File_Save").IsEnabled = (selectedTab.UserControl is LevelEditor levelEditor);
+                bool isLevelEditorTab = selectedTab.UserControl is LevelEditor levelEditor;
+                Utilities.GetApplicationMenuItem("File", "File_Save").IsEnabled = isLevelEditorTab;
+                Utilities.GetApplicationMenuItem("Go", "Go_LevelFile").IsEnabled = isLevelEditorTab;
+                Utilities.GetApplicationMenuItem("Go", "Go_LevelDirectory").IsEnabled = isLevelEditorTab;
             }
 
             // Recent files in application menu
