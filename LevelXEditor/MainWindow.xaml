@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LevelXEditor"
         xmlns:views="clr-namespace:LevelXEditor.Project.Views"
+        xmlns:statusBar="clr-namespace:LevelXEditor.Project.StatusBar"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <statusBar:StatusBarViewModal x:Key="statusBarViewModel"/>
+    </Window.Resources>
     <Grid Background="SlateGray">
         <!-- Row Definitions -->
         <Grid.RowDefinitions>
@@ -97,13 +101,16 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="2" Height="32" Background="LightGray">
+        <Grid DataContext="{StaticResource statusBarViewModel}" Grid.Row="2" Height="32" Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
             <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                 <ContentPresenter />
             </Border>
-            <Grid.RowDefinitions>
-                
-            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding StatusLastMessage}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8 0 0 0" />
+            <TextBlock Grid.Column="1" Text="{Binding StatusHoverContext}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 12 0" />
         </Grid>
     </Grid>
 </Window>
